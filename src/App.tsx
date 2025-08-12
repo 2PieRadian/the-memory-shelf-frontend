@@ -14,8 +14,14 @@ function App() {
           path="/"
           element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
         />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route
+          path="/login"
+          element={<Login setIsAuthenticated={setIsAuthenticated} />}
+        />
+        <Route
+          path="/signup"
+          element={<Signup setIsAuthenticated={setIsAuthenticated} />}
+        />
       </Routes>
     </div>
   );

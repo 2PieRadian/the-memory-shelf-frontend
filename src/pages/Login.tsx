@@ -10,30 +10,68 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router-dom";
+import React, { useState, type Dispatch, type SetStateAction } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function Login() {
+interface LoginProps {
+  setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function Login({ setIsAuthenticated }: LoginProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const backend_login_url = import.meta.env.VITE_BACKEND_LOGIN_URL;
+
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    try {
+      const res = await fetch(backend_login_url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+      });
+
+      if (res.ok) {
+        // Set Global User State
+        setIsAuthenticated(true);
+        navigate("/");
+      } else {
+        const failedResponseMessage = await res.json();
+        console.log(failedResponseMessage);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div className="h-screen flex justify-center items-center px-[20px]">
       <Card className="w-full max-w-sm">
-        <CardHeader className="grid gap-3">
-          <CardTitle className="text-left">Login to your account</CardTitle>
+        <CardHeader className="grid gap-1">
+          <CardTitle className="text-left text-lg">Login</CardTitle>
           <CardDescription className="text-left">
-            Enter your email below to login to your account
+            Enter your registered credentials
           </CardDescription>
-          <CardAction>
-            <Button variant={"outline"} className="cursor-pointer">
-              <Link to="/signup">Sign Up</Link>
-            </Button>
-          </CardAction>
         </CardHeader>
 
         <CardContent>
-          <form action="">
+          <form onSubmit={(e) => handleLogin(e)}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" placeholder="you@example.com" />
+                <Input
+                  id="email"
+                  placeholder="you@example.com"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setEmail(e.target.value)
+                  }
+                />
               </div>
 
               <div className="flex flex-col gap-2">
@@ -46,17 +84,30 @@ export default function Login() {
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" />
+                <Input
+                  id="password"
+                  type="password"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setPassword(e.target.value)
+                  }
+                />
+              </div>
+
+              <div className="grid gap-4">
+                <Button type="submit" className="w-full cursor-pointer">
+                  Login
+                </Button>
+
+                <div className="text-sm justify-center flex items-center gap-[5px]">
+                  <p>Don't have an account?</p>
+                  <Link to="/signup" className="underline">
+                    Sign up
+                  </Link>
+                </div>
               </div>
             </div>
           </form>
         </CardContent>
-
-        <CardFooter>
-          <Button type="submit" className="w-full cursor-pointer">
-            Login
-          </Button>
-        </CardFooter>
       </Card>
     </div>
   );

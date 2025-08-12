@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -10,53 +9,90 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router-dom";
+import { useState, type Dispatch, type SetStateAction } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function Signup() {
+const SIGNUP_URL = import.meta.env.VITE_BACKEND_SIGNUP_URL;
+
+interface SignUpProps {
+  setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function Signup({ setIsAuthenticated }: SignUpProps) {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const navigate = useNavigate();
+
+  async function handleSignup(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(SIGNUP_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        setIsAuthenticated(true);
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div className="h-screen flex justify-center items-center px-[20px]">
       <Card className="w-full max-w-sm">
-        <CardHeader className="grid gap-3">
-          <CardTitle className="text-left">Sign Up</CardTitle>
+        <CardHeader className="grid gap-1">
+          <CardTitle className="text-left text-lg">Sign up</CardTitle>
           <CardDescription className="text-left">
-            Enter your existing email and password below
+            Create a new account with your email
           </CardDescription>
-          <CardAction>
-            <Button variant={"outline"} className="cursor-pointer">
-              <Link to="/login">Sign In</Link>
-            </Button>
-          </CardAction>
         </CardHeader>
 
         <CardContent>
-          <form action="">
+          <form onSubmit={handleSignup}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" placeholder="you@example.com" />
+                <Input
+                  id="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </div>
 
               <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="text-sm hover:underline underline-offset-4 inline-block"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
-                <Input id="password" type="password" />
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4 mt-[25px] items-center">
+              <Button type="submit" className="w-full cursor-pointer">
+                Create Account
+              </Button>
+
+              <div className="text-sm flex items-center gap-[5px]">
+                <p>Already have an account?</p>
+                <Link to="/login" className="underline">
+                  Log in
+                </Link>
               </div>
             </div>
           </form>
         </CardContent>
-
-        <CardFooter>
-          <Button type="submit" className="w-full cursor-pointer">
-            Create Account
-          </Button>
-        </CardFooter>
       </Card>
     </div>
   );
