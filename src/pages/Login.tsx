@@ -43,7 +43,7 @@ export default function Login({ setIsAuthenticated }: LoginProps) {
         navigate("/");
       } else {
         const failedResponseMessage = await res.json();
-        console.log(failedResponseMessage);
+        console.log(failedResponseMessage.message);
       }
     } catch (error) {
       console.log(error);
