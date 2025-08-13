@@ -1,3 +1,4 @@
+import BottomNavbar from "@/components/BottomNavbar";
 import Navbar from "@/components/Navbar";
 
 interface User {
@@ -10,8 +11,9 @@ interface HomeProps {
 
 export default function Home({ user }: HomeProps) {
   return (
-    <div className=" dark:bg-primary-bg h-screen">
+    <div className="p-[10px] h-screen">
       <Navbar />
+      <BottomNavbar />
     </div>
   );
 }

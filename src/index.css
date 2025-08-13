@@ -4,7 +4,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-primary-bg: hsl(0, 0%, 0%);
+  --color-light-200: hsl(0, 0%, 95%);    
+
+
+  --color-dark-primary-bg: hsl(0, 0%, 0%);
 }
 
 
