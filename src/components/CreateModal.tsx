@@ -9,7 +9,7 @@ export default function CreateModal({
   isCreateModalOpen: boolean;
 }) {
   const modalButtonStyles =
-    "flex items-center gap-[10px] py-[6px] px-[15px] bg-light-100 text-black rounded-[15px] cursor-pointer hover:bg-light-100-hover transition hover:scale-[1.05]";
+    "flex items-center gap-[10px] py-[6px] px-[15px] bg-light-100 text-black rounded-[15px] cursor-pointer hover:bg-light-100-hover transition hover:scale-[1.04]";
 
   return (
     <AnimatePresence>
@@ -20,7 +20,7 @@ export default function CreateModal({
           exit={{ y: "20px", scale: 0 }}
           transition={{ duration: 0.15 }}
           style={{ transformOrigin: "bottom center" }}
-          className="fixed left-1/2 -translate-1/2 shadow-sm bottom-[-30px] rounded-[15px] bg-white overflow-hidden border border-light-100-border h-fit w-[250px] flex flex-col p-[20px] text-light-text"
+          className="absolute left-1/2 -translate-1/2 shadow-sm bottom-[-30px] rounded-[15px] bg-white overflow-hidden border border-light-100-border h-fit w-[250px] flex flex-col p-[20px] text-light-text"
         >
           <h1 className="font-semibold text-lg text-light-text text-center">
             Content Type

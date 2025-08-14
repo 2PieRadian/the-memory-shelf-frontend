@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -6,28 +6,27 @@
   font-family: Poppins;
 }
 
-html, body {
+html,
+body {
   overflow: hidden;
 }
 
 /* @custom-variant dark (&:is(.dark *)); */
 
-
 @theme {
   /* Dark Backgrounds */
   --color-dark-grey: hsl(210, 10%, 13%);
   --color-dark-grey-hover: hsl(210, 10%, 20%);
-  
+
   /* Dark Text */
-  
+
   /* Light Backgrounds */
   --color-light-100: hsl(0, 0%, 97%);
   --color-light-200: hsl(0, 0%, 90%);
-  --color-light-100-hover: hsl(0, 0%, 93%);
-  
+  --color-light-100-hover: hsl(0, 0%, 94%);
+
   /* Light Text */
   --color-light-text: hsl(210, 10%, 20%);
-
 
   /* Borders */
   --color-light-100-border: hsl(210, 10%, 90%);

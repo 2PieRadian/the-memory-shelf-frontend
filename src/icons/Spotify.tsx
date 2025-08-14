@@ -16,13 +16,13 @@ export default function Spotify({ size }: { size: number }) {
         y2="56.31"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset="0" stop-color="#4caf50"></stop>
-        <stop offset=".489" stop-color="#4aaf50"></stop>
-        <stop offset=".665" stop-color="#43ad50"></stop>
-        <stop offset=".79" stop-color="#38aa50"></stop>
-        <stop offset=".892" stop-color="#27a550"></stop>
-        <stop offset=".978" stop-color="#11a050"></stop>
-        <stop offset="1" stop-color="#0a9e50"></stop>
+        <stop offset="0" stopColor="#4caf50"></stop>
+        <stop offset=".489" stopColor="#4aaf50"></stop>
+        <stop offset=".665" stopColor="#43ad50"></stop>
+        <stop offset=".79" stopColor="#38aa50"></stop>
+        <stop offset=".892" stopColor="#27a550"></stop>
+        <stop offset=".978" stopColor="#11a050"></stop>
+        <stop offset="1" stopColor="#0a9e50"></stop>
       </linearGradient>
       <path
         fill="url(#tS~Tu1dsT5kMXF2Lct~HUa_G9XXzb9XaEKX_gr1)"
