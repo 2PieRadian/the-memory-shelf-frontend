@@ -1,15 +1,19 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
+import BlankPageBeforeHomePage from "./pages/BlankPageBeforeHomePage";
+import Profile from "./pages/Profile";
 
 const CHECK_AUTH_URL = "http://localhost:3000/api/v1/checkauth";
 
 function App() {
+  const navigate = useNavigate();
+
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [checkingAuth, setIsCheckingAuth] = useState(false);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({ email: "" });
 
   // Check if we have the token in the cookie
   useEffect(() => {
@@ -24,9 +28,14 @@ function App() {
           const data = await response.json();
           setUser(data);
           setIsAuthenticated(true);
+          navigate("/");
+        } else {
+          navigate("/login");
         }
       } catch (err) {
         console.log(err);
+        // TODO : Un-comment the below part after development
+        // navigate("/login");
       } finally {
         setIsCheckingAuth(false);
       }
@@ -43,12 +52,12 @@ function App() {
   }
 
   return (
-    <div>
+    <div className="overflow-hidden">
       <Routes>
         <Route
           path="/"
           element={
-            isAuthenticated ? <Home user={user} /> : <Navigate to="/login" />
+            isAuthenticated ? <Home user={user} /> : <BlankPageBeforeHomePage />
           }
         />
         <Route
@@ -59,6 +68,7 @@ function App() {
           path="/signup"
           element={<Signup setIsAuthenticated={setIsAuthenticated} />}
         />
+        <Route path="/profile" element={<Profile user={user} />} />
       </Routes>
     </div>
   );

@@ -1,5 +1,10 @@
-import BottomNavbar from "@/components/BottomNavbar";
+import { useState } from "react";
+import { Menu, Plus, User } from "lucide-react";
+
 import Navbar from "@/components/Navbar";
+import BottomNavbar from "@/components/BottomNavbar";
+import BottomNavbarIcon from "@/components/BottomNavbarIcon";
+import CreateModal from "@/components/CreateModal";
 
 interface User {
   email: string;
@@ -10,10 +15,26 @@ interface HomeProps {
 }
 
 export default function Home({ user }: HomeProps) {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  function handleCreate() {
+    setIsCreateModalOpen((prev) => !prev);
+  }
+
   return (
-    <div className="p-[10px] h-screen">
+    <div className="p-[15px] h-screen max-w-[1200px] mx-auto">
       <Navbar />
-      <BottomNavbar />
+
+      {/* Create-Modal */}
+      <CreateModal isCreateModalOpen={isCreateModalOpen} />
+
+      <BottomNavbar>
+        <>
+          <BottomNavbarIcon Icon={Menu} />
+          <BottomNavbarIcon Icon={Plus} onClick={handleCreate} />
+          <BottomNavbarIcon Icon={User} to="/profile" />
+        </>
+      </BottomNavbar>
     </div>
   );
 }
