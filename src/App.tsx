@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import BlankPageBeforeHomePage from "./pages/BlankPageBeforeHomePage";
 import Profile from "./pages/Profile";
+import CreateContent from "./pages/CreateContent";
 
 const CHECK_AUTH_URL = "http://localhost:3000/api/v1/checkauth";
 
@@ -34,7 +35,6 @@ function App() {
         }
       } catch (err) {
         console.log(err);
-        // TODO : Un-comment the below part after development
         // navigate("/login");
       } finally {
         setIsCheckingAuth(false);
@@ -69,6 +69,7 @@ function App() {
           element={<Signup setIsAuthenticated={setIsAuthenticated} />}
         />
         <Route path="/profile" element={<Profile user={user} />} />
+        <Route path="/create-content" element={<CreateContent />} />
       </Routes>
     </div>
   );

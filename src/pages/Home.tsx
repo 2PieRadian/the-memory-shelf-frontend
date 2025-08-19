@@ -6,7 +6,6 @@ import BottomNavbar from "@/components/BottomNavbar";
 import BottomNavbarIcon from "@/components/BottomNavbarIcon";
 import CreateModal from "@/components/CreateModal";
 import Sidebar from "@/components/Sidebar";
-import MobileSidebar from "@/components/MobileSidebar";
 
 interface User {
   email: string;
@@ -18,27 +17,29 @@ interface HomeProps {
 
 export default function Home({ user }: HomeProps) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [openSidebar, setOpenSidebar] = useState(true);
+  const [openSidebar, setOpenSidebar] = useState(false);
 
   function handleCreate() {
     setIsCreateModalOpen((prev) => !prev);
+  }
+
+  function handleCloseSidebar() {
+    setOpenSidebar((prev) => !prev);
   }
 
   return (
     <div className="flex">
       {openSidebar && <Sidebar setOpenSidebar={setOpenSidebar} />}
 
-      <div className="w-full relative p-[15px] h-screen max-w-[1200px] mx-auto">
+      <div className="w-full relative p-[15px] h-[100svh] max-w-[1200px] mx-auto">
         <Navbar />
-
-        {/* <MobileSidebar /> */}
 
         {/* Create-Modal */}
         <CreateModal isCreateModalOpen={isCreateModalOpen} />
 
         <BottomNavbar>
           <>
-            <BottomNavbarIcon Icon={Menu} />
+            <BottomNavbarIcon Icon={Menu} onClick={handleCloseSidebar} />
             <BottomNavbarIcon Icon={Plus} onClick={handleCreate} />
             <BottomNavbarIcon Icon={User} to="/profile" />
           </>

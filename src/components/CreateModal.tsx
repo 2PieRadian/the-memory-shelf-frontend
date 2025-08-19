@@ -2,14 +2,15 @@ import Spotify from "@/icons/Spotify";
 import X from "@/icons/X";
 import Youtube from "@/icons/Youtube";
 import { AnimatePresence, motion } from "motion/react";
+import { Link } from "react-router-dom";
 
-export default function CreateModal({
-  isCreateModalOpen,
-}: {
+interface CreateModalProps {
   isCreateModalOpen: boolean;
-}) {
+}
+
+export default function CreateModal({ isCreateModalOpen }: CreateModalProps) {
   const modalButtonStyles =
-    "flex items-center gap-[10px] py-[6px] px-[15px] bg-light-100 text-black rounded-[15px] cursor-pointer hover:bg-light-100-hover transition hover:scale-[1.04]";
+    "flex items-center gap-[10px] py-[6px] px-[15px] bg-light-100 text-black rounded-[15px] cursor-pointer bg-light-100-hover transition hover:scale-[1.04]";
 
   return (
     <AnimatePresence>
@@ -20,24 +21,24 @@ export default function CreateModal({
           exit={{ y: "20px", scale: 0 }}
           transition={{ duration: 0.15 }}
           style={{ transformOrigin: "bottom center" }}
-          className="absolute left-1/2 -translate-1/2 shadow-sm bottom-[-30px] rounded-[15px] bg-white overflow-hidden border border-light-100-border h-fit w-[250px] flex flex-col p-[20px] text-light-text"
+          className="absolute left-1/2 -translate-x-1/2 shadow-sm bottom-[100px] rounded-[15px] bg-light-100 overflow-hidden border border-light-100-border h-fit w-[250px] flex flex-col p-[20px] text-light-text"
         >
           <h1 className="font-semibold text-lg text-light-text text-center">
             Content Type
           </h1>
 
           <div className="mt-[20px] flex flex-col justify-between gap-[10px]">
-            <button className={modalButtonStyles}>
+            <Link to="/create-content" className={modalButtonStyles}>
               <Spotify size={35} /> Spotify
-            </button>
+            </Link>
 
-            <button className={modalButtonStyles}>
+            <Link to="/create-content" className={modalButtonStyles}>
               <Youtube size={35} /> Youtube
-            </button>
+            </Link>
 
-            <button className={modalButtonStyles}>
+            <Link to="/create-content" className={modalButtonStyles}>
               <X size={35} /> Twitter
-            </button>
+            </Link>
           </div>
         </motion.div>
       )}
