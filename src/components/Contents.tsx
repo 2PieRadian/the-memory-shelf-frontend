@@ -66,7 +66,6 @@ export default function Contents() {
     content: ContentItem;
   }
 
-  console.log(location.pathname);
   function ContentToRender({
     path,
     contentType,
