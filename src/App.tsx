@@ -9,16 +9,17 @@ import CreateContent from "./pages/CreateContent";
 import Loading from "./components/Loading";
 import Contents from "./components/Contents";
 import PageNotFound from "./pages/PageNotFound";
+import { useUserStore } from "./store/UserStore";
+import VibeRoom from "./pages/VibeRoom";
 
 const CHECK_AUTH_URL = "http://localhost:3000/api/v1/checkauth";
 
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
-
+  const user = useUserStore((state) => state.user);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [checkingAuth, setIsCheckingAuth] = useState(false);
-  const [user, setUser] = useState({ email: "" });
 
   // Check if we have the token in the cookie
   useEffect(() => {
@@ -31,7 +32,7 @@ function App() {
 
         if (response.ok) {
           const data = await response.json();
-          setUser(data);
+          useUserStore.setState({ user: data.user });
           setIsAuthenticated(true);
 
           // If we are already in a route, then refreshing won't take us back to Home Page
@@ -62,7 +63,8 @@ function App() {
     <div className="overflow-hidden">
       <Routes>
         {isAuthenticated ? (
-          <Route path="/" element={<Home user={user} />}>
+          <Route path="/" element={<Home />}>
+            <Route index element={<Contents />} />
             <Route path="*" element={<Contents />} />
           </Route>
         ) : (
@@ -77,8 +79,9 @@ function App() {
           path="/signup"
           element={<Signup setIsAuthenticated={setIsAuthenticated} />}
         />
-        <Route path="/profile" element={<Profile user={user} />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/create-content/*" element={<CreateContent />} />
+        <Route path="/viberoom" element={<VibeRoom />} />
 
         <Route path="/404PageNotFound" element={<PageNotFound />} />
       </Routes>

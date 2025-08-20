@@ -1,22 +1,14 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Menu, Plus, User } from "lucide-react";
+import { Outlet } from "react-router-dom";
 
 import Navbar from "@/components/Navbar";
 import BottomNavbar from "@/components/BottomNavbar";
 import BottomNavbarIcon from "@/components/BottomNavbarIcon";
 import CreateModal from "@/components/CreateModal";
 import Sidebar from "@/components/Sidebar";
-import { Outlet } from "react-router-dom";
 
-interface User {
-  email: string;
-}
-
-interface HomeProps {
-  user: User;
-}
-
-export default function Home({ user }: HomeProps) {
+export default function Home() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
 

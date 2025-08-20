@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 type BottomNavbarIconProps = {
   Icon: React.ElementType;
@@ -11,15 +11,25 @@ export default function BottomNavbarIcon({
   to,
   onClick,
 }: BottomNavbarIconProps) {
-  const location = useLocation();
-
   return (
-    <Link
-      to={to || location.pathname}
-      className={`rounded-full cursor-pointer p-[12px]`}
-      onClick={onClick}
-    >
-      <Icon size={20} />
-    </Link>
+    <>
+      {to ? (
+        <Link
+          to={to}
+          className={`rounded-full cursor-pointer p-[12px]`}
+          onClick={onClick}
+        >
+          <Icon size={20} />
+        </Link>
+      ) : (
+        <button
+          type="button"
+          className={`rounded-full cursor-pointer p-[12px]`}
+          onClick={onClick}
+        >
+          <Icon size={20} />
+        </button>
+      )}
+    </>
   );
 }

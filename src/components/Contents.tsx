@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Loading from "./Loading";
 import {
   spotifyEmbedLinkPrefix,
@@ -6,23 +6,15 @@ import {
 } from "@/lib/constants";
 import { getSpotifySongID, getYoutubeID } from "@/lib/utils";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useContent, type ContentItem } from "@/store/ContentStore";
 
-interface Content {
-  _id: string;
-  title: string;
-  link: string;
-  type: string;
-  tags: string[];
-  userId: string;
-}
-
-function YoutubeContentCard({ content }: { content: Content }) {
+function YoutubeContentCard({ content }: { content: ContentItem }) {
   const youtubeID = getYoutubeID(content.link);
 
   if (!youtubeID) return null;
 
   return (
-    <div className="flex flex-col gap-[10px]">
+    <div className="flex flex-col gap-[10px] border p-[10px] rounded-md">
       <iframe
         src={youtubeEmbedLinkPrefix + youtubeID}
         className="w-full aspect-video rounded-md"
@@ -36,20 +28,19 @@ function YoutubeContentCard({ content }: { content: Content }) {
   );
 }
 
-function SpotifyContentCard({ content }: { content: Content }) {
+function SpotifyContentCard({ content }: { content: ContentItem }) {
   return (
-    <div>
+    <div className="border p-[10px] rounded-md h-fit">
       <iframe
         src={spotifyEmbedLinkPrefix + getSpotifySongID(content.link)}
-        className="border w-full"
+        className="w-full h-[152px]"
       ></iframe>
     </div>
   );
 }
 
-const Contents = React.memo(function () {
-  const [contents, setContents] = useState<Content[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+export default function Contents() {
+  const { contents, isLoading, fetchContents } = useContent();
 
   const navigate = useNavigate();
 
@@ -64,37 +55,18 @@ const Contents = React.memo(function () {
   }
 
   useEffect(() => {
-    async function getContents() {
-      try {
-        setIsLoading(true);
-        const response = await fetch(import.meta.env.VITE_BACKEND_CONTENT_URL, {
-          credentials: "include",
-        });
-        const data = await response.json();
-
-        setContents(data.contents);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    getContents();
+    fetchContents();
   }, []);
 
   if (isLoading) return <Loading text={"Loading Links..."} />;
 
-  const contentStyles = "rounded-lg font-semibold border p-[10px]";
-
-  console.log(location.pathname);
-
   interface ContentToRenderProps {
     path: string;
     contentType: string;
-    content: Content;
+    content: ContentItem;
   }
 
+  console.log(location.pathname);
   function ContentToRender({
     path,
     contentType,
@@ -102,35 +74,30 @@ const Contents = React.memo(function () {
   }: ContentToRenderProps) {
     return (
       <>
+        {/* Youtube */}
         {path === "/youtube" && contentType === "Youtube" && (
-          <div className="border p-[10px] rounded-md">
-            <YoutubeContentCard content={content} />
-          </div>
+          <YoutubeContentCard content={content} />
         )}
 
+        {/* Spotify */}
         {path === "/spotify" && contentType === "Spotify" && (
-          <div className="border p-[10px] rounded-md">
-            <SpotifyContentCard content={content} />
-          </div>
+          <SpotifyContentCard content={content} />
         )}
 
-        {path === "" && contentType === "Spotify" && (
-          <div className="border p-[10px] rounded-md">
-            <SpotifyContentCard content={content} />
-          </div>
+        {/* Default (home path) */}
+        {path === "/" && contentType === "Youtube" && (
+          <YoutubeContentCard content={content} />
         )}
 
-        {path === "" && contentType === "Youtube" && (
-          <div className="border p-[10px] rounded-md">
-            <YoutubeContentCard content={content} />
-          </div>
+        {path === "/" && contentType === "Spotify" && (
+          <SpotifyContentCard content={content} />
         )}
       </>
     );
   }
 
   return (
-    <div className="mt-[10px] pt-[20px] h-[calc(100svh-30px-41.6px-30px)] pb-[70px] md:pb-[70px] grid md:grid-cols-2 lg:grid-cols-3 gap-[10px] overflow-y-scroll no-scrollbar">
+    <div className="mt-[10px] pt-[20px] h-[calc(100svh-30px-41.6px-30px)] pb-[70px] md:pb-[70px] grid content-start md:grid-cols-2 lg:grid-cols-3 gap-[10px] overflow-y-scroll no-scrollbar">
       {contents.map((content) => (
         <ContentToRender
           key={content._id}
@@ -141,6 +108,4 @@ const Contents = React.memo(function () {
       ))}
     </div>
   );
-});
-
-export default Contents;
+}

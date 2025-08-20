@@ -1,13 +1,7 @@
-import {
-  useEffect,
-  useState,
-  type Dispatch,
-  type ReactElement,
-  type SetStateAction,
-} from "react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import { Button } from "./ui/button";
-import { ChevronLeft } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { ChevronLeft, TvMinimalPlay } from "lucide-react";
+import { Link, NavLink } from "react-router-dom";
 import Youtube from "@/icons/Youtube";
 import Spotify from "@/icons/Spotify";
 
@@ -22,10 +16,13 @@ interface SidebarButtonProps {
 }
 
 function SidebarButton({ to = "", Icon, iconText }: SidebarButtonProps) {
+  const styles = "flex items-center gap-[10px] py-[10px] px-[20px] rounded-md";
   return (
     <NavLink
       to={to}
-      className="flex items-center bg-light-100 gap-[10px] py-[10px] px-[20px] rounded-md"
+      className={({ isActive }) =>
+        `${isActive ? "bg-light-100" : ""} ${styles}`
+      }
     >
       <Icon size={30} />
       {iconText}
@@ -34,10 +31,22 @@ function SidebarButton({ to = "", Icon, iconText }: SidebarButtonProps) {
 }
 
 function SidebarButtons() {
+  const viberoomStyles =
+    "cursor-pointer flex items-center gap-[10px] py-[10px] px-[20px] rounded-md";
   return (
     <div className="flex flex-col gap-[15px] flex-1">
       <SidebarButton to="youtube" Icon={Youtube} iconText="Youtube" />
       <SidebarButton to="spotify" Icon={Spotify} iconText="Spotify" />
+
+      <NavLink
+        to="viberoom"
+        className={({ isActive }) =>
+          `${isActive ? "bg-light-100" : ""} ${viberoomStyles}`
+        }
+      >
+        <TvMinimalPlay />
+        Vibe Room
+      </NavLink>
     </div>
   );
 }
@@ -50,16 +59,10 @@ export default function Sidebar({ setOpenSidebar }: SidebarProps) {
       setWidth(window.innerWidth);
     };
 
-    // const handleOutsideClick = (e: MouseEvent) => {
-    //   const clickedElement = e.target;
-    // };
-
     window.addEventListener("resize", handleResize);
-    // window.addEventListener("click", handleOutsideClick);
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      // window.removeEventListener("click", handleOutsideClick);
     };
   }, []);
 
@@ -72,7 +75,9 @@ export default function Sidebar({ setOpenSidebar }: SidebarProps) {
     <div
       className={`${styles} flex flex-col bg-white min-w-[260px] max-w-[300px] border-r border-light-100-border p-[20px]`}
     >
-      <h1 className="font-light text-[20px] mb-[20px]">The Memory Shelf</h1>
+      <Link to="/" className="font-light text-[20px] mb-[20px]">
+        The Memory Shelf
+      </Link>
       {/* Sidebar Buttons */}
       <SidebarButtons />
 
