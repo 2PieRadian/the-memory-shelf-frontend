@@ -46,7 +46,7 @@ export default function Signup({ setIsAuthenticated }: SignUpProps) {
   }
 
   return (
-    <div className="h-screen flex justify-center items-center px-[20px]">
+    <div className="h-[100svh] flex justify-center items-center px-[20px]">
       <Card className="w-full max-w-sm">
         <CardHeader className="grid gap-1">
           <CardTitle className="text-left text-lg">Sign up</CardTitle>

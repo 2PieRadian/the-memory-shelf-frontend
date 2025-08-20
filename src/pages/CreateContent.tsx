@@ -1,19 +1,20 @@
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useState } from "react";
+import type { LinkType } from "@/lib/types";
+import { Home } from "lucide-react";
+import { useState, type ChangeEvent } from "react";
 import { Link, useLocation } from "react-router-dom";
+
+import BottomNavbar from "@/components/BottomNavbar";
+import BottomNavbarIcon from "@/components/BottomNavbarIcon";
+import { getLinkInputPlaceholder, validateYoutubeLink } from "@/lib/utils";
 
 interface LabeledInputProps {
   label: string;
   placeholder: string;
-  onChange?: () => void;
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 function LabeledInput({ label, placeholder, onChange }: LabeledInputProps) {
@@ -34,53 +35,83 @@ export default function CreateContent() {
   const [link, setLink] = useState("");
   const location = useLocation();
 
-  function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  let contentType = location.pathname.split("/")[2];
+  contentType = contentType[0].toUpperCase() + contentType.substring(1);
+
+  function handleTitleChange(e: ChangeEvent<HTMLInputElement>) {
     setTitle(e.target.value);
   }
 
-  function handleLinkChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleLinkChange(e: ChangeEvent<HTMLInputElement>) {
     setLink(e.target.value);
   }
 
+  async function createContent() {
+    if (!title || !link) {
+      window.alert("Title and Link must not be empty");
+      return;
+    }
+
+    if (contentType.toLowerCase() === "youtube" && !validateYoutubeLink(link)) {
+      alert("Link is not valid!");
+      return;
+    }
+
+    try {
+      const response = await fetch(import.meta.env.VITE_BACKEND_CONTENT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ link: link, title: title, type: contentType }),
+        credentials: "include",
+      });
+
+      console.log(await response.json());
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
-    <div className="w-full px-[15px] h-[100svh] max-w-[700px] mx-auto flex flex-col gap-[30px]">
-      <h1 className="text-[27px] mt-[30px] font-semibold text-center">
-        Create content
-      </h1>
+    <div className="w-full relative h-[100svh]">
+      <div className="absolute top-[calc(50%-50px)] left-1/2 -translate-x-1/2 -translate-y-1/2 border w-[calc(100%-30px)] p-[15px] max-w-[700px] flex flex-col gap-[30px] rounded-md">
+        <h1 className="text-[27px] mt-[15px] font-semibold text-center">
+          Add {contentType} link
+        </h1>
 
-      <div className="flex flex-col gap-[20px]">
-        <LabeledInput
-          label="Title"
-          placeholder="eg. Title here"
-          onChange={handleTitleChange}
-        />
-        <LabeledInput
-          label="Link"
-          placeholder="eg. https://youtube.com"
-          onChange={handleLinkChange}
-        />
+        <div className="flex flex-col gap-[20px]">
+          <LabeledInput
+            label="Title"
+            placeholder="eg. Title here"
+            value={title}
+            onChange={handleTitleChange}
+          />
+          <LabeledInput
+            label="Link"
+            placeholder={getLinkInputPlaceholder(contentType as LinkType)}
+            value={link}
+            onChange={handleLinkChange}
+          />
 
-        <div className="flex flex-col gap-[7px]">
-          <Label>Type</Label>
-          <Select>
-            <SelectTrigger className="">
-              <SelectValue placeholder="Select Content Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="spotify">Spotify</SelectItem>
-              <SelectItem value="youtube">Youtube</SelectItem>
-              <SelectItem value="twitter">Twitter</SelectItem>
-            </SelectContent>
-          </Select>
+          <LabeledInput
+            label="Add Tags"
+            placeholder="#Machine learning, #ElonMusk"
+            value={link}
+            onChange={handleLinkChange}
+          />
         </div>
+
+        <Link to="/">
+          <Button className="cursor-pointer w-full" onClick={createContent}>
+            Create
+          </Button>
+        </Link>
       </div>
 
-      <Link
-        to="/"
-        className="text-center bg-green-600 text-[17px] py-[5px] rounded-sm text-white"
-      >
-        Create
-      </Link>
+      <BottomNavbar>
+        <BottomNavbarIcon to="/" Icon={Home}></BottomNavbarIcon>
+      </BottomNavbar>
     </div>
   );
 }

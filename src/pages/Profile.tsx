@@ -12,7 +12,7 @@ export default function Profile({ user }: ProfileProps) {
   return (
     <div className="p-[15px] h-screen max-w-[1200px] mx-auto">
       <BottomNavbar>
-        <BottomNavbarIcon Icon={House} />
+        <BottomNavbarIcon to="/" Icon={House} />
       </BottomNavbar>
     </div>
   );

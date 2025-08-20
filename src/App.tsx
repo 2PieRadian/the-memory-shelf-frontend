@@ -1,4 +1,4 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
@@ -6,11 +6,15 @@ import Signup from "./pages/Signup";
 import BlankPageBeforeHomePage from "./pages/BlankPageBeforeHomePage";
 import Profile from "./pages/Profile";
 import CreateContent from "./pages/CreateContent";
+import Loading from "./components/Loading";
+import Contents from "./components/Contents";
+import PageNotFound from "./pages/PageNotFound";
 
 const CHECK_AUTH_URL = "http://localhost:3000/api/v1/checkauth";
 
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [checkingAuth, setIsCheckingAuth] = useState(false);
@@ -29,13 +33,20 @@ function App() {
           const data = await response.json();
           setUser(data);
           setIsAuthenticated(true);
-          navigate("/");
+
+          // If we are already in a route, then refreshing won't take us back to Home Page
+          if (
+            location.pathname === "/login" ||
+            location.pathname === "/signup"
+          ) {
+            navigate("/");
+          }
         } else {
           navigate("/login");
         }
       } catch (err) {
         console.log(err);
-        // navigate("/login");
+        navigate("/login");
       } finally {
         setIsCheckingAuth(false);
       }
@@ -44,22 +55,20 @@ function App() {
   }, []);
 
   if (checkingAuth) {
-    return (
-      <div className="flex h-screen w-screen text-xl items-center justify-center font-light">
-        Loading...
-      </div>
-    );
+    return <Loading text="Loading" />;
   }
 
   return (
     <div className="overflow-hidden">
       <Routes>
-        <Route
-          path="/"
-          element={
-            isAuthenticated ? <Home user={user} /> : <BlankPageBeforeHomePage />
-          }
-        />
+        {isAuthenticated ? (
+          <Route path="/" element={<Home user={user} />}>
+            <Route path="*" element={<Contents />} />
+          </Route>
+        ) : (
+          <Route path="" element={<BlankPageBeforeHomePage />} />
+        )}
+
         <Route
           path="/login"
           element={<Login setIsAuthenticated={setIsAuthenticated} />}
@@ -69,7 +78,9 @@ function App() {
           element={<Signup setIsAuthenticated={setIsAuthenticated} />}
         />
         <Route path="/profile" element={<Profile user={user} />} />
-        <Route path="/create-content" element={<CreateContent />} />
+        <Route path="/create-content/*" element={<CreateContent />} />
+
+        <Route path="/404PageNotFound" element={<PageNotFound />} />
       </Routes>
     </div>
   );

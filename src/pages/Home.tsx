@@ -6,6 +6,7 @@ import BottomNavbar from "@/components/BottomNavbar";
 import BottomNavbarIcon from "@/components/BottomNavbarIcon";
 import CreateModal from "@/components/CreateModal";
 import Sidebar from "@/components/Sidebar";
+import { Outlet } from "react-router-dom";
 
 interface User {
   email: string;
@@ -33,6 +34,8 @@ export default function Home({ user }: HomeProps) {
 
       <div className="w-full relative p-[15px] h-[100svh] max-w-[1200px] mx-auto">
         <Navbar />
+
+        <Outlet />
 
         {/* Create-Modal */}
         <CreateModal isCreateModalOpen={isCreateModalOpen} />

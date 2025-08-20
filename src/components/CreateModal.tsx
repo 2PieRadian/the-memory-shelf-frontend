@@ -28,15 +28,15 @@ export default function CreateModal({ isCreateModalOpen }: CreateModalProps) {
           </h1>
 
           <div className="mt-[20px] flex flex-col justify-between gap-[10px]">
-            <Link to="/create-content" className={modalButtonStyles}>
+            <Link to="/create-content/spotify" className={modalButtonStyles}>
               <Spotify size={35} /> Spotify
             </Link>
 
-            <Link to="/create-content" className={modalButtonStyles}>
+            <Link to="/create-content/youtube" className={modalButtonStyles}>
               <Youtube size={35} /> Youtube
             </Link>
 
-            <Link to="/create-content" className={modalButtonStyles}>
+            <Link to="/create-content/twitter" className={modalButtonStyles}>
               <X size={35} /> Twitter
             </Link>
           </div>
