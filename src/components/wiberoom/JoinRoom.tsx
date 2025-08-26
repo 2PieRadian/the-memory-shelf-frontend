@@ -2,12 +2,21 @@ import { useState, type ChangeEvent } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { joinRoom } from "@/lib/socket";
 
 export default function JoinRoom() {
   const [roomCode, setRoomCode] = useState("");
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setRoomCode(e.target.value);
+  }
+
+  function handleJoinRoom() {
+    if (roomCode.length === 6) {
+      joinRoom(roomCode);
+    } else {
+      console.log("Room code must be 6 digits");
+    }
   }
 
   return (
@@ -30,7 +39,9 @@ export default function JoinRoom() {
         />
       </div>
 
-      <Button className="w-full cursor-pointer">Join Room</Button>
+      <Button className="w-full cursor-pointer" onClick={handleJoinRoom}>
+        Join Room
+      </Button>
     </div>
   );
 }

@@ -68,3 +68,14 @@ export function validateYoutubeLink(link: string) {
     return false;
   }
 }
+
+export function generateSixDigitRoomCode() {
+  const allDigits = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+  let roomCode = "";
+  for (let i = 0; i < 6; i++) {
+    roomCode += allDigits[Math.floor(Math.random() * allDigits.length)];
+  }
+  
+  return roomCode;
+}

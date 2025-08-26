@@ -11,6 +11,7 @@ import Contents from "./components/Contents";
 import PageNotFound from "./pages/PageNotFound";
 import { useUserStore } from "./store/UserStore";
 import VibeRoom from "./pages/VibeRoom";
+import Rooms from "./pages/wiberoom/Rooms";
 
 const CHECK_AUTH_URL = "http://localhost:3000/api/v1/checkauth";
 
@@ -81,8 +82,9 @@ function App() {
         />
         <Route path="/profile" element={<Profile />} />
         <Route path="/create-content/*" element={<CreateContent />} />
-        <Route path="/viberoom" element={<VibeRoom />} />
-
+        <Route path="/viberoom" element={<VibeRoom />}>
+          <Route path="rooms" element={<Rooms />} />
+        </Route>
         <Route path="/404PageNotFound" element={<PageNotFound />} />
       </Routes>
     </div>

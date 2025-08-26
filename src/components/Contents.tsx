@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Loading from "./Loading";
 import {
   spotifyEmbedLinkPrefix,
@@ -9,17 +9,28 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useContent, type ContentItem } from "@/store/ContentStore";
 
 function YoutubeContentCard({ content }: { content: ContentItem }) {
-  const youtubeID = getYoutubeID(content.link);
+  const [isLoading, setIsLoading] = useState(true);
 
+  const youtubeID = getYoutubeID(content.link);
   if (!youtubeID) return null;
 
   return (
     <div className="flex flex-col gap-[10px] border p-[10px] rounded-md">
-      <iframe
-        src={youtubeEmbedLinkPrefix + youtubeID}
-        className="w-full aspect-video rounded-md"
-        allowFullScreen
-      ></iframe>
+      <div className="relative w-full aspect-video rounded-md">
+        {isLoading && (
+          <div className="absolute rounded-md inset-0 flex items-center justify-center bg-gray-100 z-10">
+            <Loading text="Loading Video..." />
+          </div>
+        )}
+
+        <iframe
+          src={youtubeEmbedLinkPrefix + youtubeID}
+          className="w-full h-full rounded-md"
+          allowFullScreen
+          loading="lazy"
+          onLoad={() => setIsLoading(false)}
+        ></iframe>
+      </div>
 
       <div className="flex items-center justify-between">
         <h1>{content.title}</h1>
@@ -34,6 +45,7 @@ function SpotifyContentCard({ content }: { content: ContentItem }) {
       <iframe
         src={spotifyEmbedLinkPrefix + getSpotifySongID(content.link)}
         className="w-full h-[152px]"
+        loading="lazy"
       ></iframe>
     </div>
   );
@@ -96,15 +108,19 @@ export default function Contents() {
   }
 
   return (
-    <div className="mt-[10px] pt-[20px] h-[calc(100svh-30px-41.6px-30px)] pb-[70px] md:pb-[70px] grid content-start md:grid-cols-2 lg:grid-cols-3 gap-[10px] overflow-y-scroll no-scrollbar">
-      {contents.map((content) => (
-        <ContentToRender
-          key={content._id}
-          path={location.pathname}
-          contentType={content.type}
-          content={content}
-        />
-      ))}
+    <div className="mt-[20px]">
+      <h1 className="text-[23px] font-light text-gray-100">Your Space</h1>
+
+      <div className="pt-[20px] h-[calc(100svh-30px-41.6px-30px)] pb-[70px] md:pb-[70px] grid content-start md:grid-cols-2 lg:grid-cols-3 gap-[10px] overflow-y-scroll no-scrollbar">
+        {contents.map((content) => (
+          <ContentToRender
+            key={content._id}
+            path={location.pathname}
+            contentType={content.type}
+            content={content}
+          />
+        ))}
+      </div>
     </div>
   );
 }

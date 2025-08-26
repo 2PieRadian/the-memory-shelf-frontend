@@ -4,6 +4,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import type { PrivacyOptions } from "@/lib/interfaces";
 import { useState, type ChangeEvent } from "react";
+import { createRoom } from "@/lib/socket";
 
 export default function CreateRoom() {
   const [selectedPrivacy, setSelectedPrivacy] =
@@ -12,6 +13,14 @@ export default function CreateRoom() {
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setRoomName(e.target.value);
+  }
+
+  function handleCreateRoom() {
+    if (roomName.length > 0) {
+      createRoom(roomName, selectedPrivacy);
+    } else {
+      console.log("Room name is required");
+    }
   }
 
   return (
@@ -59,7 +68,9 @@ export default function CreateRoom() {
         </div>
       </div>
 
-      <Button className="w-full cursor-pointer">Create Room</Button>
+      <Button className="w-full cursor-pointer" onClick={handleCreateRoom}>
+        Create Room
+      </Button>
     </div>
   );
 }
