@@ -25,6 +25,10 @@ body {
   --color-light-200: hsl(0, 0%, 90%);
   --color-light-100-hover: hsl(0, 0%, 94%);
 
+  /* Red Color */
+  --color-red-500: hsl(0, 70%, 55%);
+  --color-red-500-hover: hsl(0, 70%, 52%);
+
   /* Light Text */
   --color-light-text: hsl(210, 10%, 20%);
 

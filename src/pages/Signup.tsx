@@ -9,24 +9,23 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useUserStore } from "@/store/UserStore";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const SIGNUP_URL = import.meta.env.VITE_BACKEND_SIGNUP_URL;
 
-interface SignUpProps {
-  setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
-}
-
-export default function Signup({ setIsAuthenticated }: SignUpProps) {
+export default function Signup() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
+  const { setUser, isSigningUp, setIsSigningUp } = useUserStore();
 
   async function handleSignup(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     try {
+      setIsSigningUp(true);
       const response = await fetch(SIGNUP_URL, {
         method: "POST",
         headers: {
@@ -37,11 +36,14 @@ export default function Signup({ setIsAuthenticated }: SignUpProps) {
       });
 
       if (response.ok) {
-        setIsAuthenticated(true);
+        const data = await response.json();
+        setUser(data);
         navigate("/");
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsSigningUp(false);
     }
   }
 
@@ -81,7 +83,7 @@ export default function Signup({ setIsAuthenticated }: SignUpProps) {
 
             <div className="flex flex-col gap-4 mt-[25px] items-center">
               <Button type="submit" className="w-full cursor-pointer">
-                Create Account
+                {isSigningUp ? "Creating Account..." : "Create Account"}
               </Button>
 
               <div className="text-sm flex items-center gap-[5px]">

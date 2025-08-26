@@ -47,6 +47,11 @@ export function joinRoom(roomId: string) {
 export async function createRoom(roomName: string, privacy: PrivacyOptions) {
   const { user } = useUserStore.getState();
 
+  if (!user) {
+    console.log("User not logged in");
+    return;
+  }
+
   const createRoomData: Data = {
     type: "create-room",
     email: user?.email || "",

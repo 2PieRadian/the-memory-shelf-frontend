@@ -8,17 +8,15 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React, { useState, type Dispatch, type SetStateAction } from "react";
+import { useUserStore } from "@/store/UserStore";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-interface LoginProps {
-  setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
-}
-
-export default function Login({ setIsAuthenticated }: LoginProps) {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { setUser, isLoggingIn, setIsLoggingIn } = useUserStore();
 
   const backend_login_url = import.meta.env.VITE_BACKEND_LOGIN_URL;
 
@@ -26,6 +24,8 @@ export default function Login({ setIsAuthenticated }: LoginProps) {
     e.preventDefault();
 
     try {
+      setIsLoggingIn(true);
+
       const res = await fetch(backend_login_url, {
         method: "POST",
         headers: {
@@ -37,7 +37,10 @@ export default function Login({ setIsAuthenticated }: LoginProps) {
 
       if (res.ok) {
         // Set Global User State
-        setIsAuthenticated(true);
+        const data = await res.json();
+        setUser(data);
+
+        // Redirect to Home Page
         navigate("/");
       } else {
         const failedResponseMessage = await res.json();
@@ -45,6 +48,8 @@ export default function Login({ setIsAuthenticated }: LoginProps) {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoggingIn(false);
     }
   }
 
@@ -93,7 +98,7 @@ export default function Login({ setIsAuthenticated }: LoginProps) {
 
               <div className="grid gap-4">
                 <Button type="submit" className="w-full cursor-pointer">
-                  Login
+                  {isLoggingIn ? "Logging in..." : "Login"}
                 </Button>
 
                 <div className="text-sm justify-center flex items-center gap-[5px]">

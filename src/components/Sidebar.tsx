@@ -1,9 +1,10 @@
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import { Button } from "./ui/button";
 import { ChevronLeft, TvMinimalPlay } from "lucide-react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import Youtube from "@/icons/Youtube";
 import Spotify from "@/icons/Spotify";
+import { useUserStore } from "@/store/UserStore";
 
 interface SidebarProps {
   setOpenSidebar: Dispatch<SetStateAction<boolean>>;
@@ -53,6 +54,8 @@ function SidebarButtons() {
 
 export default function Sidebar({ setOpenSidebar }: SidebarProps) {
   const [width, setWidth] = useState(window.innerWidth);
+  const navigate = useNavigate();
+  const { setUser } = useUserStore();
 
   useEffect(() => {
     const handleResize = () => {
@@ -65,6 +68,26 @@ export default function Sidebar({ setOpenSidebar }: SidebarProps) {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  async function handleLogout() {
+    const logoutUrl = "http://localhost:3000/api/v1/logout";
+
+    try {
+      const response = await fetch(logoutUrl, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        setUser(null);
+        navigate("/login");
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("An error occurred during logout:", error);
+    }
+  }
 
   const mobileStyles = "absolute top-0 left-0 h-[100svh] z-[220]";
   const desktopStyles = "";
@@ -80,6 +103,16 @@ export default function Sidebar({ setOpenSidebar }: SidebarProps) {
       </Link>
       {/* Sidebar Buttons */}
       <SidebarButtons />
+
+      {/* Logout Button */}
+      <Button
+        variant={"outline"}
+        size={"lg"}
+        onClick={handleLogout}
+        className="mb-[10px] cursor-pointer bg-red-500! hover:bg-red-500-hover! border-none! text-white hover:text-white"
+      >
+        Logout
+      </Button>
 
       <Button
         variant={"outline"}
