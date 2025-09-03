@@ -36,7 +36,7 @@ export default function YourRooms() {
   }, []);
 
   return (
-    <div className="w-full max-w-[600px] px-[20px] shadow-md py-[30px] rounded-md bg-light-100">
+    <div className="w-full border border-light-100-border h-full max-w-[600px] px-[20px] shadow-md py-[30px] rounded-md bg-light-100">
       <h1 className="text-center font-semibold text-[20px]">Your Rooms</h1>
 
       <p className="text-center text-[13px] font-light">Rooms you've created</p>
