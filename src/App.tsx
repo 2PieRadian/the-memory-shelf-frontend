@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
-import BlankPageBeforeHomePage from "./pages/BlankPageBeforeHomePage";
 import Profile from "./pages/Profile";
 import CreateContent from "./pages/CreateContent";
 import Loading from "./components/Loading";
@@ -17,7 +16,6 @@ import Contents from "./components/Contents";
 import PageNotFound from "./pages/PageNotFound";
 import { useUserStore } from "./store/UserStore";
 import VibeRoom from "./pages/VibeRoom";
-import Rooms from "./pages/wiberoom/Rooms";
 
 function App() {
   const navigate = useNavigate();
@@ -59,9 +57,10 @@ function App() {
           element={!isAuthenticated ? <Navigate to="/login" /> : <Profile />}
         />
         <Route path="/create-content/*" element={<CreateContent />} />
-        <Route path="/viberoom" element={<VibeRoom />}>
-          <Route path="rooms" element={<Rooms />} />
-        </Route>
+        <Route
+          path="/viberoom"
+          element={!isAuthenticated ? <Navigate to="/login" /> : <VibeRoom />}
+        />
         <Route path="/404PageNotFound" element={<PageNotFound />} />
       </Routes>
     </div>

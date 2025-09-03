@@ -4,16 +4,9 @@ import CreateRoom from "./CreateRoom";
 
 export default function RoomOptions() {
   return (
-    <div className="bg-white h-[100svh]">
-      <header className="py-[20px] px-[40px] border-b border-light-100-border">
-        <h1 className="text-[20px]">viberoom</h1>
-      </header>
-
-      <div className="px-[20px]">
-        <Tabs
-          defaultValue="join-room"
-          className="w-full max-w-[500px] mt-[40px] mx-auto"
-        >
+    <div className="bg-white w-full max-w-[600px]">
+      <div>
+        <Tabs defaultValue="join-room" className="w-full">
           <TabsList className="h-auto mx-auto">
             <TabsTrigger
               value="join-room"

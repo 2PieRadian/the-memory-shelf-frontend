@@ -109,7 +109,9 @@ export default function Contents() {
 
   return (
     <div className="mt-[20px]">
-      <h1 className="text-[23px] font-light text-gray-100">Your Space</h1>
+      {location.pathname === "/" && (
+        <h1 className="text-[23px] font-light text-gray-100">Your Space</h1>
+      )}
 
       <div className="pt-[20px] h-[calc(100svh-30px-41.6px-30px)] pb-[70px] md:pb-[70px] grid content-start md:grid-cols-2 lg:grid-cols-3 gap-[10px] overflow-y-scroll no-scrollbar">
         {contents.map((content) => (

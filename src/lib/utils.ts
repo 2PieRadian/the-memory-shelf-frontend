@@ -79,7 +79,7 @@ export function generateSixDigitRoomCode() {
   }
 
   // TODO - Delete this after testing
-  console.log(roomCode);
+  console.log("RoomCode: ", roomCode);
 
   return roomCode;
 }
